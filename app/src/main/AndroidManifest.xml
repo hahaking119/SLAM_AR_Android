@@ -21,7 +21,7 @@
         android:extractNativeLibs = "true">
         <activity
             android:name="com.martin.ads.ui.ModelActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
