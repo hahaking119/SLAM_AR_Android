@@ -73,6 +73,11 @@ Java_com_martin_ads_slamar_NativeHelper_initSLAM(JNIEnv *env, jobject instance,
     string vocName,settingName;
     getline(in,vocName);
     getline(in,settingName);
+
+    // 去掉vocName和settingName中的空格和回车
+    vocName.erase(std::remove_if(vocName.begin(), vocName.end(), ::isspace), vocName.end());
+    settingName.erase(std::remove_if(settingName.begin(), settingName.end(), ::isspace), settingName.end());
+
     vocName=modelPath+vocName;
     settingName=modelPath+settingName;
 
