@@ -13,9 +13,9 @@
 
 void addTextToImage(const string &s, cv::Mat &im, const int r, const int g, const int b);
 void printStatus(const int &status, cv::Mat &im);
-void drawTrackedPoints(const std::vector<cv::KeyPoint> &vKeys, const std::vector<ORB_SLAM2::MapPoint *> &vMPs, cv::Mat &im);
+void drawTrackedPoints(const std::vector<cv::KeyPoint> &vKeys, const std::vector<ORB_SLAM3::MapPoint *> &vMPs, cv::Mat &im);
 
-Plane* detectPlane(const cv::Mat Tcw, const std::vector<ORB_SLAM2::MapPoint*> &vMPs, const int iterations);
+Plane* detectPlane(const Sophus::SE3f Tcw, const std::vector<ORB_SLAM3::MapPoint*> &vMPs, const int iterations);
 void initProjectionMatrix(int w, int h, double fu, double fv, double u0, double v0, double zNear, double zFar ,float projectionMatrix[]);
 
 void getColMajorMatrixFromMat(float M[],cv::Mat &img);

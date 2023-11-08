@@ -7,7 +7,7 @@
 #include <cstring>
 #include <string>
 #include <algorithm>
-#include <include/Common.h>
+#include "Common.h"
 
 const float PI= (const float) acos(-1);
 #define I(_i, _j) ((_j)+ 4*(_i))

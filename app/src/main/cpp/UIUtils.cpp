@@ -28,7 +28,7 @@ void printStatus(const int &status, cv::Mat &im)
     }
 }
 
-void drawTrackedPoints(const std::vector<cv::KeyPoint> &vKeys, const std::vector<ORB_SLAM2::MapPoint *> &vMPs, cv::Mat &im)
+void drawTrackedPoints(const std::vector<cv::KeyPoint> &vKeys, const std::vector<ORB_SLAM3::MapPoint *> &vMPs, cv::Mat &im)
 {
     const int N = vKeys.size();
     for(int i=0; i<N; i++) {
@@ -39,23 +39,27 @@ void drawTrackedPoints(const std::vector<cv::KeyPoint> &vKeys, const std::vector
     }
 }
 
-Plane* detectPlane(const cv::Mat Tcw, const std::vector<ORB_SLAM2::MapPoint*> &vMPs, const int iterations)
+Plane* detectPlane(const Sophus::SE3f Tcw, const std::vector<ORB_SLAM3::MapPoint*> &vMPs, const int iterations)
 {
     // Retrieve 3D points
     vector<cv::Mat> vPoints;
     vPoints.reserve(vMPs.size());
-    vector<ORB_SLAM2::MapPoint*> vPointMP;
+    vector<ORB_SLAM3::MapPoint*> vPointMP;
     vPointMP.reserve(vMPs.size());
 
     for(size_t i=0; i<vMPs.size(); i++)
     {
-        ORB_SLAM2::MapPoint* pMP=vMPs[i];
+        ORB_SLAM3::MapPoint* pMP=vMPs[i];
         if(pMP)
         {
             if(pMP->Observations()>5)
             {
-                vPoints.push_back(pMP->GetWorldPos());
+                Eigen::Vector3f vector3F = pMP->GetWorldPos();
+                cv::Mat cvMatrix = (cv::Mat_<float>(3, 1) << vector3F.x(), vector3F.y(), vector3F.z());
+                vPoints.push_back(cvMatrix);
                 vPointMP.push_back(pMP);
+                //
+                cvMatrix.release();
             }
         }
     }
@@ -143,7 +147,7 @@ Plane* detectPlane(const cv::Mat Tcw, const std::vector<ORB_SLAM2::MapPoint*> &v
         }
     }
 
-    vector<ORB_SLAM2::MapPoint*> vInlierMPs(nInliers,NULL);
+    vector<ORB_SLAM3::MapPoint*> vInlierMPs(nInliers,NULL);
     int nin = 0;
     for(int i=0; i<N; i++)
     {
@@ -154,7 +158,20 @@ Plane* detectPlane(const cv::Mat Tcw, const std::vector<ORB_SLAM2::MapPoint*> &v
         }
     }
 
-    return new Plane(vInlierMPs,Tcw);
+    //将TCW转为cv::Mat格式
+    Eigen::Matrix3f rotationMatrix = Tcw.rotationMatrix();
+    Eigen::Vector3f translationVector = Tcw.translation();
+    Eigen::Matrix4f transformationMatrix = Eigen::Matrix4f::Identity();
+    transformationMatrix.block(0, 0, 3, 3) = rotationMatrix;
+    transformationMatrix.block(0, 3, 3, 1) = translationVector;
+    cv::Mat cvMatrix(4, 4, CV_32F);
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            cvMatrix.at<float>(i, j) = transformationMatrix(i, j);
+        }
+    }
+
+    return new Plane(vInlierMPs,cvMatrix);
 }
 
 

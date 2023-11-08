@@ -11,7 +11,7 @@
 class Plane
 {
 public:
-    Plane(const std::vector<ORB_SLAM2::MapPoint*> &vMPs, const cv::Mat &Tcw);
+    Plane(const std::vector<ORB_SLAM3::MapPoint*> &vMPs, const cv::Mat &Tcw);
     Plane(const float &nx, const float &ny, const float &nz, const float &ox, const float &oy, const float &oz);
     cv::Mat ExpSO3(const float &x, const float &y, const float &z);
     cv::Mat ExpSO3(const cv::Mat &v);
@@ -28,7 +28,7 @@ public:
 
     float glTpw[16];
     //MapPoints that define the plane
-    std::vector<ORB_SLAM2::MapPoint*> mvMPs;
+    std::vector<ORB_SLAM3::MapPoint*> mvMPs;
     //camera pose when the plane was first observed (to compute normal direction)
     cv::Mat mTcw, XC;
 };

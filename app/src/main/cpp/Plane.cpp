@@ -25,7 +25,7 @@ cv::Mat Plane::ExpSO3(const cv::Mat &v)
     return ExpSO3(v.at<float>(0),v.at<float>(1),v.at<float>(2));
 }
 
-Plane::Plane(const std::vector<ORB_SLAM2::MapPoint *> &vMPs, const cv::Mat &Tcw):mvMPs(vMPs),mTcw(Tcw.clone())
+Plane::Plane(const std::vector<ORB_SLAM3::MapPoint *> &vMPs, const cv::Mat &Tcw):mvMPs(vMPs),mTcw(Tcw.clone())
 {
     rang = -3.14f/2+((float)rand()/RAND_MAX)*3.14f;
     Recompute();
@@ -50,13 +50,18 @@ void Plane::Recompute()
     int nPoints = 0;
     for(int i=0; i<N; i++)
     {
-        ORB_SLAM2::MapPoint* pMP = mvMPs[i];
+        ORB_SLAM3::MapPoint* pMP = mvMPs[i];
         if(!pMP->isBad())
         {
-            cv::Mat Xw = pMP->GetWorldPos();
+            Eigen::Vector3f vector3F = pMP->GetWorldPos();
+            cv::Mat Xw = (cv::Mat_<float>(3, 1) << vector3F.x(), vector3F.y(), vector3F.z());
+
+//            cv::Mat Xw = pMP->GetWorldPos();
             o+=Xw;
             A.row(nPoints).colRange(0,3) = Xw.t();
             nPoints++;
+
+            Xw.release();
         }
     }
     A.resize(nPoints);

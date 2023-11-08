@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class NativeHelper {
     static {
-        System.loadLibrary("opencv_java4");
+//        System.loadLibrary("opencv_java4");
         System.loadLibrary("SLAM_CORE");
-        System.loadLibrary("SLAM_JNI");
+//        System.loadLibrary("SLAM_JNI");
     }
     private static final String TAG = "NativeHelper";
 

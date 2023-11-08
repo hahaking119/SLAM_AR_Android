@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 30
     defaultConfig {
-        applicationId "com.martin.ads.slamar2"
+        applicationId "com.eqgis.orb_slam3.demo"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
@@ -29,7 +29,9 @@ android {
 
     packagingOptions {
         pickFirst 'lib/armeabi-v7a/libopencv_java4.so'
+        pickFirst 'lib/armeabi-v7a/lib/arm64-v8a/libc++_shared.so'
         pickFirst 'lib/arm64-v8a/libopencv_java4.so'
+        pickFirst 'lib/arm64-v8a/libc++_shared.so'
     }
 
     buildTypes {
@@ -44,7 +46,9 @@ android {
     }
     externalNativeBuild {
         cmake {
-            path "CMakeLists.txt"
+//            path "CMakeLists.bak"
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.18.1'
         }
     }
 
@@ -61,6 +65,11 @@ android {
             include 'armeabi-v7a','arm64-v8a'
             // Specifies that we do not want to also generate a universal APK that includes all ABIs.
             universalApk true
+        }
+    }
+    sourceSets{
+        main {
+            jniLibs.srcDirs = ['libs']
         }
     }
 }

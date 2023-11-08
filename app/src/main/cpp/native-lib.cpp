@@ -8,16 +8,16 @@
 #include "Matrix.h"
 
 extern "C" {
-std::string modelPath;
+//std::string modelPath;
 
-ORB_SLAM2::System *slamSys;
+ORB_SLAM3::System *slamSys;
 Plane *pPlane;
 float fx,fy,cx,cy;
 double timeStamp;
 bool slamInited=false;
-vector<ORB_SLAM2::MapPoint*> vMPs;
+vector<ORB_SLAM3::MapPoint*> vMPs;
 vector<cv::KeyPoint> vKeys;
-cv::Mat Tcw;
+Sophus::SE3f Tcw;
 
 const int PLANE_DETECTED=233;
 const int PLANE_NOT_DETECTED=1234;
@@ -65,31 +65,32 @@ Java_com_martin_ads_slamar_NativeHelper_initSLAM(JNIEnv *env, jobject instance,
 
     if(slamInited) return;
     slamInited=true;
-    modelPath=path;
-    LOGE("Model Path is %s",modelPath.c_str());
+//    modelPath=path;
+//    LOGE("Model Path is %s",modelPath.c_str());
     env->ReleaseStringUTFChars(path_, path);
-    ifstream in;
-    in.open(modelPath+"config.txt");
-    string vocName,settingName;
-    getline(in,vocName);
-    getline(in,settingName);
-
-    // 去掉vocName和settingName中的空格和回车
-    vocName.erase(std::remove_if(vocName.begin(), vocName.end(), ::isspace), vocName.end());
-    settingName.erase(std::remove_if(settingName.begin(), settingName.end(), ::isspace), settingName.end());
-
-    vocName=modelPath+vocName;
-    settingName=modelPath+settingName;
-
-    cv::FileStorage fSettings(settingName, cv::FileStorage::READ);
-    fx = fSettings["Camera.fx"];
-    fy = fSettings["Camera.fy"];
-    cx = fSettings["Camera.cx"];
-    cy = fSettings["Camera.cy"];
-
-    timeStamp=0;
-    LOGD("%s %c %s %c",vocName.c_str(),vocName[vocName.length()-1],settingName.c_str(),settingName[settingName.length()-1]);
-    slamSys=new ORB_SLAM2::System(vocName,settingName,ORB_SLAM2::System::MONOCULAR);
+//    ifstream in;
+//    in.open(modelPath+"config.txt");
+//    string vocName,settingName;
+//    getline(in,vocName);
+//    getline(in,settingName);
+//
+//    // 去掉vocName和settingName中的空格和回车
+//    vocName.erase(std::remove_if(vocName.begin(), vocName.end(), ::isspace), vocName.end());
+//    settingName.erase(std::remove_if(settingName.begin(), settingName.end(), ::isspace), settingName.end());
+//
+//    vocName=modelPath+vocName;
+//    settingName=modelPath+settingName;
+//
+//    cv::FileStorage fSettings(settingName, cv::FileStorage::READ);
+//    fx = fSettings["Camera.fx"];
+//    fy = fSettings["Camera.fy"];
+//    cx = fSettings["Camera.cx"];
+//    cy = fSettings["Camera.cy"];
+//
+//    timeStamp=0;
+//    LOGD("%s %c %s %c",vocName.c_str(),vocName[vocName.length()-1],settingName.c_str(),settingName[settingName.length()-1]);
+    slamSys=new ORB_SLAM3::System("/storage/emulated/0/SLAM/VOC/ORBvoc.bin","/storage/emulated/0/SLAM/Calibration/PARAconfig.yaml",ORB_SLAM3::System::MONOCULAR,false);
+//    slamSys=new ORB_SLAM3::System(vocName,settingName,ORB_SLAM3::System::MONOCULAR);
 }
 
 JNIEXPORT void JNICALL
@@ -108,12 +109,16 @@ JNIEXPORT void JNICALL
 Java_com_martin_ads_slamar_NativeHelper_detect(JNIEnv *env, jobject instance,
                                                jintArray statusBuf_) {
     jint *statusBuf = env->GetIntArrayElements(statusBuf_, NULL);
-    if(!Tcw.empty()){
+    if (Tcw.translation().hasNaN() || Tcw.rotationMatrix().hasNaN()){
+        //no thing
+    } else{
         pPlane=detectPlane(Tcw,vMPs,50);
         if(pPlane && slamSys->MapChanged())
             pPlane->Recompute();
         statusBuf[1]=pPlane? PLANE_DETECTED:PLANE_NOT_DETECTED;
     }
+//    if(!Tcw.empty()){
+//    }
     env->ReleaseIntArrayElements(statusBuf_, statusBuf, 0);
 }
 
@@ -130,7 +135,21 @@ Java_com_martin_ads_slamar_NativeHelper_getV(JNIEnv *env, jobject instance, jflo
     jfloat *viewM = env->GetFloatArrayElements(viewM_, NULL);
 
     float tmpM[16];
-    getColMajorMatrixFromMat(tmpM,Tcw);
+
+    Eigen::Matrix3f rotationMatrix = Tcw.rotationMatrix();
+    Eigen::Vector3f translationVector = Tcw.translation();
+    Eigen::Matrix4f transformationMatrix = Eigen::Matrix4f::Identity();
+    transformationMatrix.block(0, 0, 3, 3) = rotationMatrix;
+    transformationMatrix.block(0, 3, 3, 1) = translationVector;
+    cv::Mat cvMatrix(4, 4, CV_32F);
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            cvMatrix.at<float>(i, j) = transformationMatrix(i, j);
+        }
+    }
+
+    getColMajorMatrixFromMat(tmpM,cvMatrix);
+//    getColMajorMatrixFromMat(tmpM,Tcw);
     getRUBViewMatrixFromRDF(tmpM,viewM);
 
     env->ReleaseFloatArrayElements(viewM_, viewM, 0);
