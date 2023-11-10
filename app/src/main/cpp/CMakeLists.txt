@@ -40,6 +40,7 @@ add_library(
         SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
 
+        src/SlamSystemNative.cpp
         native-lib.cpp
         Plane.cpp
         UIUtils.cpp
@@ -56,4 +57,9 @@ target_link_libraries(
         orbslam3
         android
         jnigraphics
-        log)
+        log
+
+#        libopencv_java4
+        EGL
+        GLESv1_CM
+)

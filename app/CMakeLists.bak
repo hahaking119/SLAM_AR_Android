@@ -156,6 +156,7 @@ add_library(SLAM_CORE SHARED
 
         ###Martin
         src/main/cpp/Utils.cpp
+        src/main/cpp/src/SlamSystemNative.cpp
         )
 
 

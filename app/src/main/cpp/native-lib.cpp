@@ -1,6 +1,8 @@
 #include <jni.h>
 #include <string>
 #include <opencv2/opencv.hpp>
+#include <orb-slam3/include/System.h>
+#include <opencv2/core/eigen.hpp>
 #include "include/System.h"
 #include "Common.h"
 #include "Plane.h"
@@ -165,3 +167,72 @@ Java_com_martin_ads_slamar_NativeHelper_getP(JNIEnv *env, jobject instance, jint
     env->ReleaseFloatArrayElements(projectionM_, projectionM, 0);
 }
 }
+
+//std::chrono::steady_clock::time_point t0;
+//double tframe=0;
+//extern "C"
+//JNIEXPORT jint JNICALL
+//Java_com_martin_ads_slamar_NativeHelper_trackMonocular(JNIEnv *env, jclass clazz,
+//                                                         jlong mat_native_obj_addr) {
+//    //处理单目相机获取的图像
+//    cv::Mat *pMat = (cv::Mat*)mat_native_obj_addr;
+////    cv::Mat *srcMat = (cv::Mat*)mat_native_obj_addr;
+////    cv::Mat *pMat;
+////    cv::resize(*srcMat,*pMat,cv::Size(srcMat->cols / 2, srcMat->rows / 2));
+//
+//    cv::Mat pose;
+//
+//    std::chrono::steady_clock::time_point t1 = std::chrono::steady_clock::now();
+//    tframe  = std::chrono::duration_cast < std::chrono::duration < double >> (t1 - t0).count();
+//    // Pass the image to the SLAM system
+//    cout << "tframe = " << tframe << endl;
+//    clock_t start,end;
+//    start=clock();
+////    pose = slamSys->TrackMonocular(*pMat,tframe); // TODO change to monocular_inertial
+//    Sophus::SE3f Tcw_SE3f = slamSys->TrackMonocular(*pMat,tframe); // TODO change to monocular_inertial
+//    Eigen::Matrix4f Tcw_Matrix = Tcw_SE3f.matrix();
+//
+//    cv::eigen2cv(Tcw_Matrix, pose);
+//    end = clock();
+//
+//    LOGI("Get Pose Use Time=%f\n",((double)end-start)/CLOCKS_PER_SEC);
+//
+////    static bool instialized =false;
+////    static bool markerDetected =false;
+//////    if(slamSys->MapChanged()){
+//////        instialized = false;
+//////        markerDetected =false;
+//////    }
+//
+//    //Plane 平面计算
+//    if(!pose.empty()){
+//        //todo 计算Plane
+//    }
+//
+////    // 获取矩阵的底层数据指针
+////    const float* data_ptr = Tcw_Matrix.data();
+////    // 获取矩阵的大小（4x4）
+////    int rows = Tcw_Matrix.rows();
+////    int cols = Tcw_Matrix.cols();
+////    // 创建一个一维的 float 数组来存储数据
+////    float Tcw_data[16]; // 4x4 矩阵有 16 个元素
+////    // 复制数据到一维数组
+////    for (int i = 0; i < rows; i++) {
+////        for (int j = 0; j < cols; j++) {
+////            Tcw_data[i * cols + j] = data_ptr[i * cols + j];
+////        }
+////    }
+//
+//    cv::Mat ima=pose;
+//    jfloatArray resultArray = env->NewFloatArray(ima.rows * ima.cols);
+//    jfloat *resultPtr;
+//
+//    resultPtr = env->GetFloatArrayElements(resultArray, 0);
+//    for (int i = 0; i < ima.rows; i++)
+//        for (int j = 0; j < ima.cols; j++) {
+//            float tempdata=ima.at<float>(i,j);
+//            resultPtr[i * ima.rows + j] =tempdata;
+//        }
+//    env->ReleaseFloatArrayElements(resultArray, resultPtr, 0);
+//    return slamSys->GetTrackingState();
+//}

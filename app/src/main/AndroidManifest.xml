@@ -24,7 +24,7 @@
         android:theme="@style/AppTheme"
         android:extractNativeLibs = "true">
         <activity
-            android:name="com.martin.ads.ui.ModelActivity"
+            android:name="com.eqgis.slam.DefaultCameraActivity"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -33,10 +33,20 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.martin.ads.ui.ArCamUIActivity"
-            android:theme="@style/ListTheme"
-            android:screenOrientation="landscape"/>
+<!--        <activity-->
+<!--            android:name="com.martin.ads.ui.ModelActivity"-->
+<!--            android:screenOrientation="landscape">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
+
+<!--        <activity-->
+<!--            android:name="com.martin.ads.ui.ArCamUIActivity"-->
+<!--            android:theme="@style/ListTheme"-->
+<!--            android:screenOrientation="landscape"/>-->
     </application>
 
 </manifest>

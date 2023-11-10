@@ -106,4 +106,6 @@ public class NativeHelper {
         if(inM.length!=outM.length) throw new RuntimeException("copyMatrix: unequal length");
         System.arraycopy(inM,0,outM,0,inM.length);
     }
+
+    public native int trackMonocular(long matAddr);
 }
