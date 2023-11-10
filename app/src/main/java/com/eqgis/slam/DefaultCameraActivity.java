@@ -11,6 +11,7 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.CameraBridgeViewBase.CvCameraViewListener2;
 import org.opencv.core.Size;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.WindowDecorActionBar;
+import androidx.core.app.ActivityCompat;
 
 import com.eqgis.slam.core.SlamSystem;
 import com.martin.ads.slamar.R;
@@ -70,6 +72,10 @@ public class DefaultCameraActivity extends CameraActivity implements CvCameraVie
         Log.i(TAG, "called onCreate");
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        ActivityCompat.requestPermissions(this,new String[]{
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        },0);
 
         setContentView(R.layout.tutorial1_surface_view);
 
