@@ -18,11 +18,12 @@ import com.martin.ads.constant.GlobalConstant;
 import com.martin.ads.utils.TextureUtils;
 import com.martin.ads.rendering.gles.OrthoFilter;
 
-import org.opencv.BuildConfig;
+//import org.opencv.BuildConfig;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+import org.opencv.utils.OpenCVConstants;
 
 import java.util.List;
 
@@ -247,7 +248,7 @@ public class CameraGLView extends CameraGLViewBase implements PreviewCallback {
     @Override
     public void onPreviewFrame(byte[] frame, Camera arg1) {
         Log.d(TAG, "onPreviewFrame: "+Thread.currentThread().getId());
-        if (BuildConfig.DEBUG)
+        if (OpenCVConstants.DEBUG)
             Log.d(TAG, "Preview Frame received. Frame size: " + frame.length);
         synchronized (this) {
             mFrameChain[mChainIdx].put(0, 0, frame);

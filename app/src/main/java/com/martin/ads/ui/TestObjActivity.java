@@ -8,7 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.martin.ads.rendering.render.ObjectRenderer;
-import com.martin.ads.slamar.R;
+import com.martin.ads.R;
 import com.martin.ads.utils.BufferUtils;
 import com.martin.ads.utils.Logger;
 

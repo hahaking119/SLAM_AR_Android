@@ -5,7 +5,7 @@ import android.opengl.GLES20;
 import android.opengl.Matrix;
 
 import com.martin.ads.rendering.obj.Plain;
-import com.martin.ads.slamar.R;
+import com.martin.ads.R;
 import com.martin.ads.utils.TextureUtils;
 
 import javax.microedition.khronos.opengles.GL10;

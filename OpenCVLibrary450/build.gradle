@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 android {
+    namespace 'org.opencv'
     compileSdkVersion 26
 
     defaultConfig {
@@ -14,4 +15,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+    // 解决Java版本兼容性问题
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    // 启用 AIDL 构建特性（AGP 8+ 默认可能未创建 AIDL 任务）
+    buildFeatures {
+        aidl true
+    }
+    // 添加这个配置来确保 AIDL 文件被正确处理
+    sourceSets {
+        main {
+            aidl.srcDirs = ['src/main/aidl']
+        }
+    }
+
 }

@@ -21,7 +21,7 @@ import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.opengl.Matrix;
 
-import com.martin.ads.slamar.R;
+import com.martin.ads.R;
 import com.martin.ads.utils.ShaderUtils;
 
 import java.io.IOException;

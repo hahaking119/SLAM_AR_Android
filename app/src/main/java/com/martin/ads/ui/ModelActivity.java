@@ -12,7 +12,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.martin.ads.slamar.R;
+import com.martin.ads.R;
 import com.martin.ads.utils.ZipHelper;
 
 import androidx.core.app.ActivityCompat;

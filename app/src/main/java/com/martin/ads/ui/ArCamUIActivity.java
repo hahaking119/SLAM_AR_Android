@@ -21,7 +21,7 @@ import com.martin.ads.constant.GlobalConstant;
 import com.martin.ads.rendering.render.ArObjectWrapper;
 import com.martin.ads.rendering.render.ObjRendererWrapper;
 import com.martin.ads.slamar.NativeHelper;
-import com.martin.ads.slamar.R;
+import com.martin.ads.R;
 import com.martin.ads.rendering.render.GLES10Demo;
 import com.martin.ads.rendering.gles.GLRootView;
 import com.martin.ads.utils.FpsMeter;
@@ -70,10 +70,9 @@ public class ArCamUIActivity extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.context_menu:
-                detectPlane=true;
-                break;
+        int id = item.getItemId();
+        if (id == R.id.context_menu) {
+            detectPlane = true;
         }
         return super.onOptionsItemSelected(item);
     }
