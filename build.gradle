@@ -2,12 +2,14 @@
 
 buildscript {
     repositories {
-        google()
-        jcenter()
-
+//        google()
+//        jcenter()
+        google() // 保留 Google 仓库（AGP、AndroidX 依赖从这里下载）
+        mavenCentral() // 替换 jcenter()，主流第三方依赖仓库
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.1.2"
+//        classpath "com.android.tools.build:gradle:4.1.2"
+        classpath "com.android.tools.build:gradle:8.5.0"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -16,9 +18,10 @@ buildscript {
 
 allprojects {
     repositories {
+//        google()
+//        jcenter()
         google()
-        jcenter()
-
+        mavenCentral() // 同样替换 jcenter()
     }
 }
 

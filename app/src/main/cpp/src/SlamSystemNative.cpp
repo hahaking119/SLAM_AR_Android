@@ -5,6 +5,10 @@
 #include "include/SlamSystemNative.h"
 #include "System.h"
 #include <jni.h>
+#include <fstream>
+#include <string>
+#include <android/asset_manager_jni.h>
+#include <android/asset_manager.h>
 #include <opencv2/core/eigen.hpp>
 #include <opencv2/opencv.hpp>
 

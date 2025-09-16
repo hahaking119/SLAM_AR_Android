@@ -1,14 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
+    namespace 'com.eqgis.slam'
     compileSdkVersion 30
     defaultConfig {
-        applicationId "com.eqgis.orb_slam3.demo"
+        applicationId "com.eqgis.slam"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         externalNativeBuild {
             cmake {
                 cppFlags "-std=c++11", "-frtti", "-fexceptions"
@@ -18,7 +19,7 @@ android {
                 arguments "-DANDROID_ARM_NEON=TRUE"
                 arguments  "-DANDROID_TOOLCHAIN=clang"
                 arguments  "-DCMAKE_BUILD_TYPE=Release"
-                arguments  "-DBUILD_FAT_JAVA_LIBS"
+                arguments  "-DBUILD_FAT_JAVA_LIBS=TRUE"
                 arguments  '-DANDROID_STL=c++_shared'
             }
         }
@@ -29,7 +30,7 @@ android {
 
     packagingOptions {
         pickFirst 'lib/armeabi-v7a/libopencv_java4.so'
-        pickFirst 'lib/armeabi-v7a/lib/arm64-v8a/libc++_shared.so'
+        pickFirst 'lib/armeabi-v7a/libc++_shared.so'
         pickFirst 'lib/arm64-v8a/libopencv_java4.so'
         pickFirst 'lib/arm64-v8a/libc++_shared.so'
     }
@@ -48,7 +49,6 @@ android {
         cmake {
 //            path "CMakeLists.bak"
             path file('src/main/cpp/CMakeLists.txt')
-            version '3.18.1'
         }
     }
 
@@ -72,16 +72,16 @@ android {
             jniLibs.srcDirs = ['libs']
         }
     }
+    ndkVersion '27.0.12077973'
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.3.0'
     implementation 'de.javagl:obj:0.3.0'
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
     implementation project(':OpenCVLibrary450')
 }

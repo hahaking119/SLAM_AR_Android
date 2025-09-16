@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.18.1)
 project("SLAM_CORE")
 
 #设置opencv android sdk的路径
-set(OpenCV_DIR D:/0_proj/Holo_SDK/ORB-SLAM/OpenCV-android-sdk/sdk/native/jni)
+set(OpenCV_DIR /Users/bytedance/Documents/workspace/AmapSDK/slam_sdk/dependents/OpenCV-android-sdk/sdk/native/jni)
 
 find_package(OpenCV REQUIRED)
 include_directories(${OpenCV_INCLUDE_DIRS})

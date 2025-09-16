@@ -26,7 +26,7 @@ import androidx.appcompat.app.WindowDecorActionBar;
 import androidx.core.app.ActivityCompat;
 
 import com.eqgis.slam.core.SlamSystem;
-import com.martin.ads.slamar.R;
+import com.eqgis.slam.R;
 
 import java.util.Collections;
 import java.util.List;
@@ -86,7 +86,9 @@ public class DefaultCameraActivity extends CameraActivity implements CvCameraVie
         mOpenCvCameraView.setCvCameraViewListener(this);
         textInfo = findViewById(R.id.text_info);
 
-        boolean init = SlamSystem.init("/storage/emulated/0/SLAM/VOC/ORBvoc.bin","/storage/emulated/0/SLAM/Calibration/PARAconfig.yaml",0);
+//        boolean init = SlamSystem.init("/storage/emulated/0/SLAM/VOC/ORBvoc.bin","/storage/emulated/0/SLAM/Calibration/PARAconfig.yaml",0);
+        // 修改后：使用assets中的文件路径
+        boolean init = SlamSystem.init("ORBvoc.txt.arm.bin","CameraSettings.yaml",0);
 
         Toast.makeText(this, "SLAM初始化：", Toast.LENGTH_SHORT).show();
 
